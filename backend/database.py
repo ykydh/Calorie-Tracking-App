@@ -47,7 +47,7 @@ def createDatabase():
         DATE INT,
         YEAR INT,
         TIME INT,
-        PRIMARY KEY (ELOGID),
+        PRIMARY KEY (ELOGID)
    );
     """)
 
@@ -100,8 +100,8 @@ def createDatabase():
         EXERCISEID INT NOT NULL,
         ELOGID INT NOT NULL,
         NAME VARCHAR(80),
-        PRIMARY KEY (EXERCISEID)
-        FOREIGN KEY (ELOGID) REFERENCES Exercise_Log(ELOGID),
+        PRIMARY KEY (EXERCISEID),
+        FOREIGN KEY (ELOGID) REFERENCES Exercise_Log(ELOGID)
    );
     """)
 
@@ -111,8 +111,8 @@ def createDatabase():
         EXERCISEID INT NOT NULL,
         ELOGID INT NOT NULL,
         NAME VARCHAR(80),
-        PRIMARY KEY (EXERCISEID)
-        FOREIGN KEY (ELOGID) REFERENCES Exercise_Log(ELOGID),
+        PRIMARY KEY (EXERCISEID),
+        FOREIGN KEY (ELOGID) REFERENCES Exercise_Log(ELOGID)
    );
     """)
 
