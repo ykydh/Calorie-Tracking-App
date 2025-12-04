@@ -1,2 +1,2 @@
 # Calorie-Tracking-App
-## Lucius Garavaglia, Yutaro Kiyota, Wallace Pickett, Hunter Parsons
+## Lucius Garavaglia, Yutaro Kiyota, Aiden Pickett, Hunter Parsons
