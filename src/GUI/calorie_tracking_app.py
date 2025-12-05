@@ -24,8 +24,11 @@ class CalorieTrackingApp(ctk.CTk):
             self.frames[ScreenClass.__name__] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.userToken = None
         self.username = None
+        self.userWeight = None
+        self.userHeight = None
+        self.userDOB = None
+        self.userGoalWeight = None
         
         self.bind("<Return>", self.handleEnter)
 

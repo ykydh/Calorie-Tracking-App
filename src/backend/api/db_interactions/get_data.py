@@ -1,5 +1,5 @@
 import sqlite3
-from queries import Queries
+from backend.api.db_interactions.queries import Queries
 
 class GetData:
     def __init__(self):
@@ -8,10 +8,19 @@ class GetData:
         self.cursor = self.conn.cursor()
         self.cursor.execute("PRAGMA foreign_keys = ON;")
         
-    def getPasswordWithUsername(self, username):
-        self.cursor.execute(Queries.GET_PASSWORD_FROM_USERNAME, {"username": username})
-        return self.cursor.fetchone()
+    def getUserWithUsername(self, username):
+        try:
+            self.cursor.execute(Queries.GET_USER_FROM_USERNAME, {"username": username})
+            data = self.cursor.fetchone()
+            return {"success": True, "data": data}
+        except Exception as e:
+            return {"success": False, "message": str(e)}
     
-    def getPasswordWithUsername(self, email):
-        self.cursor.execute(Queries.GET_PASSWORD_FROM_USERNAME, {"email": email})
-        return self.cursor.fetchone()
+    def getUserWithEmail(self, email):
+        try:
+            self.cursor.execute(Queries.GET_USER_FROM_EMAIL, {"email": email})
+            data = self.cursor.fetchone()
+            return {"success": True, "data": data}
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+    

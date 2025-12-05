@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from src.backend.api.user_auth import authUser
+from backend.api.user_auth import loginRequest
 
 class LoginScreen(ctk.CTkFrame):
     def __init__(self, master, controller):
@@ -47,13 +47,18 @@ class LoginScreen(ctk.CTkFrame):
             self.showError("Must fill out all fields")
             return
         
-        response = authUser(credential, password)
+        response = loginRequest(credential, password)
         
-        if not response.get("success"):
+        if not response["success"]:
             self.showError(response["message"])
         else:
-            self.controller.username = response.get("username")
-            self.controller.showFrame("MessageBoard")
+            data = response
+            self.controller.username = response["data"]["username"]
+            self.controller.userWeight = response["data"]["weight"]
+            self.controller.userHeight = response["data"]["Height"]
+            self.controller.userDOB = response["data"]["dob"]
+            self.controller.userGoalWeight = response["data"]["goalWeight"]
+            self.controller.showFrame("Dashboard")
 
     def showError(self, message):
         self.errorLabel.configure(text=message)

@@ -15,112 +15,98 @@ def createDatabase():
     
     #Account
     cursor.execute("""
-        CREATE TABLE Account (
-            USERNAME VARCHAR(80) NOT NULL UNIQUE,
-            EMAIL VARCHAR(80) NOT NULL UNIQUE,
-            PASSWORD_HASH VARCHAR(64) NOT NULL,
-            PRIMARY KEY (USERNAME)  
-    );
+        CREATE TABLE IF NOT EXISTS Account (
+            USERNAME VARCHAR(80) PRIMARY KEY,
+            EMAIL VARCHAR(255) UNIQUE NOT NULL,
+            PASSWORD_HASH VARCHAR(64) NOT NULL
+        );
     """)
 
     #User
     cursor.execute("""
-    CREATE TABLE User (
-        USERNAME VARCHAR(80) NOT NULL UNIQUE,
-        WEIGHT INT,
-        HEIGHT INT,
-        DOB INT,
-        GOALWEIGHT INT,
-        PRIMARY KEY (USERNAME),
-        FOREIGN KEY (USERNAME) REFERENCES Account(USERNAME) ON DELETE CASCADE
-    );
+        CREATE TABLE IF NOT EXISTS User (
+            USERNAME VARCHAR(80) PRIMARY KEY,
+            WEIGHT INTEGER,
+            HEIGHT INTEGER,
+            DOB DATE,
+            GOAL_WEIGHT INTEGER,
+            FOREIGN KEY (USERNAME) REFERENCES Account(USERNAME) ON DELETE CASCADE
+        );
     """)
 
     #Food
     cursor.execute("""
-    CREATE TABLE Food (
-        FOOD_ID INT NOT NULL AUTOINCREMENT UNIQUE,
-        NAME VARCHAR(80),
-        BRAND VARCHAR(80),
-        CALORIES DECIMAL NOT NULL,
-        FAT DECIMAL(3,3),
-        PROTEIN DECIMAL(3,3),
-        CARBS DECIMAL(3,3),
-        PRIMARY KEY (FOOD_ID)
-    );
+        CREATE TABLE IF NOT EXISTS Food (
+            FOOD_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            NAME TEXT,
+            BRAND TEXT,
+            CALORIES REAL NOT NULL,
+            FAT REAL,
+            PROTEIN REAL,
+            CARBS REAL
+        );
     """)
 
     #Food Barcodes
     cursor.execute("""
-    CREATE TABLE Food_Barcodes (
-        BARCODE_ID INT NOT NULL UNIQUE,
-        FOOD_ID INT NOT NULL,
-        PRIMARY KEY (BARCODE_ID),
-        FOREIGN KEY (FOOD_ID) REFERENCES Food(FOOD_ID) ON DELETE CASCADE
-    );
+        CREATE TABLE IF NOT EXISTS Food_Barcodes (
+            BARCODE_ID INTEGER PRIMARY KEY,
+            FOOD_ID INTEGER NOT NULL,
+            FOREIGN KEY (FOOD_ID) REFERENCES Food(FOOD_ID) ON DELETE CASCADE
+        );
     """)
     
+    # Exercise
     cursor.execute("""
-    CREATE TABLE Exercise (
-        EXERCISE_ID INT NOT NULL AUTOINCREMENT UNIQUE,
-        TYPE VARCHAR,
-        PRIMARY KEY (EXERCISE_ID) ON DELETE CASCADE
-    );
+        CREATE TABLE IF NOT EXISTS Exercise (
+            EXERCISE_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            TYPE VARCHAR(1)
+        );
     """)
 
     #Cardio
     cursor.execute("""
-    CREATE TABLE Cardio (
-        CARDIO_ID INT NOT NULL UNIQUE,
-        NAME VARCHAR(80),
-        CALORIES_BURNED_PER_MINUTE INT,
-        PRIMARY KEY (EXERCISE_ID),
-        FOREIGN KEY (CARDIO_ID) REFERENCES Exercise(EXERCISE_ID) ON DELETE CASCADE
-    );
+        CREATE TABLE IF NOT EXISTS Cardio (
+            CARDIO_ID INTEGER PRIMARY KEY,
+            NAME TEXT,
+            CALORIES_BURNED_PER_MINUTE INTEGER,
+            FOREIGN KEY (CARDIO_ID) REFERENCES Exercise(EXERCISE_ID) ON DELETE CASCADE
+        );
     """)
 
     #Lifting
     cursor.execute("""
-    CREATE TABLE Lifting (
-        LIFT_ID INT NOT NULL UNIQUE,
-        NAME VARCHAR(80),
-        MUSCLES_WORKED VARCHAR(80),
-        PRIMARY KEY (EXERCISE_ID),
-        FOREIGN KEY (LIFT_ID) REFERENCES Exercise(EXERCISE_ID) ON DELETE CASCADE
-    );
+        CREATE TABLE IF NOT EXISTS Lifting (
+            LIFT_ID INTEGER PRIMARY KEY,
+            NAME TEXT,
+            MUSCLES_WORKED TEXT,
+            FOREIGN KEY (LIFT_ID) REFERENCES Exercise(EXERCISE_ID) ON DELETE CASCADE
+        );
     """)
     
     #Food Log
     cursor.execute("""
-    CREATE TABLE Food_Log (
-        LOG_ID INT NOT NULL AUTOINCREMENT UNIQUE,
-        OWNER_USERNAME VARCHAR(80) NOT NULL,
-        FOOD_ID INT NOT NULL,
-        WEIGHT INT,
-        MONTH VARCHAR(80),
-        DATE INT,
-        YEAR INT,
-        TIME INT,
-        PRIMARY KEY (LOG_ID),
-        FOREIGN KEY (OWNER_USERNAME) REFERENCES Account(USERNAME) ON DELETE CASCADE,
-        FOREGIN KEY (FOOD_ID) REFERENCES Food(FOOD_ID) ON DELETE CASCADE
-    );
+        CREATE TABLE IF NOT EXISTS Food_Log (
+            LOG_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            OWNER_USERNAME VARCHAR(80) NOT NULL,
+            FOOD_ID INTEGER NOT NULL,
+            WEIGHT INTEGER,
+            ATE_AT DATETIME,
+            FOREIGN KEY (OWNER_USERNAME) REFERENCES Account(USERNAME) ON DELETE CASCADE,
+            FOREIGN KEY (FOOD_ID) REFERENCES Food(FOOD_ID) ON DELETE CASCADE
+        );
     """)
 
     #Exercise Log
     cursor.execute("""
-    CREATE TABLE Exercise_Log (
-        E_LOG_ID INT NOT NULL AUTOINCREMENT UNIQUE,
-        EXERCISE_ID INT NOT NULL,
-        OWNER_USERNAME VARCHAR(80) NOT NULL,
-        MONTH VARCHAR(80),
-        DATE INT,
-        YEAR INT,
-        TIME INT,
-        PRIMARY KEY (E_LOG_ID),
-        FOREIGN KEY (OWNER_USERNAME) REFERENCES Account(USERNAME) ON DELETE CASCADE,
-        FOREIGN KEY (EXERCISE_ID) REFERENCES Exercise(EXERCISE_ID) ON DELETE CASCADE
-    );
+        CREATE TABLE IF NOT EXISTS Exercise_Log (
+            E_LOG_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            EXERCISE_ID INTEGER NOT NULL,
+            OWNER_USERNAME VARCHAR(80) NOT NULL,
+            PERFORMED_AT DATETIME,
+            FOREIGN KEY (OWNER_USERNAME) REFERENCES Account(USERNAME) ON DELETE CASCADE,
+            FOREIGN KEY (EXERCISE_ID) REFERENCES Exercise(EXERCISE_ID) ON DELETE CASCADE
+        );
     """)
 
     conn.commit()

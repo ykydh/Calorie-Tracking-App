@@ -1,13 +1,12 @@
 import customtkinter as ctk
 
-import customtkinter as ctk
-# from Callers.sign_up_caller import SignUpCaller
+from backend.api.user_submissions import UserSubmissions
 
 class Biometrics(ctk.CTkFrame):
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
-        # self.signUpCaller = SignUpCaller()
+        self.userSubmissions = UserSubmissions()
         
         # Configure grid to center contents and scale with window
         self.grid_rowconfigure(0, weight=1)   # top spacer
@@ -28,38 +27,77 @@ class Biometrics(ctk.CTkFrame):
         self.weightEntry = ctk.CTkEntry(content, width=300, height=40, placeholder_text="Weight (lbs.)")
         self.weightEntry.pack(pady=10)
 
+        # Goal weight
+        self.goalWeightEntry = ctk.CTkEntry(content, width=300, height=40, placeholder_text="Goal Weight (lbs.)")
+        self.goalWeightEntry.pack(pady=10)
+
         # Height entry
         self.heightEntry = ctk.CTkEntry(content, width=300, height=40, placeholder_text="Height (inches)")
         self.heightEntry.pack(pady=10)
 
-        # Age entry
-        self.ageEntry = ctk.CTkEntry(content, width=300, height=40, placeholder_text="Age")
-        self.ageEntry.pack(pady=10)
+        # DOB entry frame
+        ageEntryFrame = ctk.CTkFrame(content, width=300, height=40)
+        ageEntryFrame.pack(pady=10, fill="x")
+        ageEntryFrame.grid_rowconfigure(0, weight=1)
+        ageEntryFrame.grid_rowconfigure(1, weight=1)
+        ageEntryFrame.grid_columnconfigure(0, weight=1)
+        ageEntryFrame.grid_columnconfigure(1, weight=1)
+        ageEntryFrame.grid_columnconfigure(2, weight=1)
+
+        # DOB label
+        ctk.CTkLabel(ageEntryFrame, text="Date of brith", font=("Arial", 18)).grid(row=0, column=1, padx=5, pady=10, sticky="ew")
+
+        # Year entry
+        self.yearEntry = ctk.CTkEntry(ageEntryFrame, placeholder_text="Year")
+        self.yearEntry.grid(row=1, column=0, padx=5, pady=10, sticky="ew")
+
+        # Month entry
+        self.monthEntry = ctk.CTkEntry(ageEntryFrame, placeholder_text="Month")
+        self.monthEntry.grid(row=1, column=1, padx=5, pady=10, sticky="ew")
+
+        # Day entry
+        self.dayEntry = ctk.CTkEntry(ageEntryFrame, placeholder_text="Day")
+        self.dayEntry.grid(row=1, column=2, padx=5, pady=10, sticky="ew")
 
         # Error
         self.errorLabel = ctk.CTkLabel(content, text="", text_color="red")
         self.errorLabel.pack(pady=5)
         self.errorLabel.pack_forget()
 
-        ctk.CTkButton(content, width=300, height=40, text="Biometrics", command=self.handleBiometrics).pack(pady=20)
+        ctk.CTkButton(content, width=300, height=40, text="Submit", command=self.handleBiometrics).pack(pady=20)
 
     def handleBiometrics(self):
         self.hideError()
-        
-        try:
-            weight = float(self.weightEntry.get())
-        except:
-            self.showError("Invalid weight")
-        
-        try:
-            height = float(self.heightEntry.get())
-        except:
-            self.showError("Invalid height")
+
+        val = self.weightEntry.get()
+        if len(val):
+            response = self.userSubmissions.updateWeight(self.controller.username, self.weightEntry.get())
+            if not response["success"]:
+                self.showError("Invalid weight")
+
+        val = self.goalWeightEntry.get()
+        if len(val):
+            response = self.userSubmissions.updateGoalWeight(self.controller.username, self.goalWeightEntry.get())
+            if not response["success"]:
+                self.showError("Invalid goal weight")
+
+        val = self.heightEntry.get()
+        if len(val):
+            response = self.userSubmissions.updateHeight(self.controller.username, self.heightEntry.get())
+            if not response["success"]:
+                self.showError("Invalid height")
             
-        try:
-            age = int(self.ageEntry.get())
-        except:
-            self.showError("Invalid age")
+        val = self.heightEntry.get()
+        if len(val):
+            response = self.userSubmissions.updateHeight(self.controller.username, self.heightEntry.get())
+            if not response["success"]:
+                self.showError("Invalid height")
+        
+        val = self.yearEntry.get() + '-' + self.monthEntry.get() + '-' + self.dayEntry.get()
+        if len(val):
+            response = self.userSubmissions.changeDOB(self.controller.username, self.heightEntry.get())
+            if not response["success"]:
+                self.showError("Invalid date of birth")
             
         
 

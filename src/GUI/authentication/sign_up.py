@@ -1,5 +1,5 @@
 import customtkinter as ctk
-# from Callers.sign_up_caller import SignUpCaller
+from backend.api.user_auth import signUpRequest
 
 class SignUpScreen(ctk.CTkFrame):
     def __init__(self, master, controller):
@@ -53,24 +53,13 @@ class SignUpScreen(ctk.CTkFrame):
             self.showError("Must fill out all fields")
             return
 
-        response = self.signUpCaller.signUp(username, email, password)
-        try:
-            data = response.json()
-        except:
-            self.showError(f"Server error: {response.status_code}")
+        response = signUpRequest(email, username, password)
 
-        # Non-200 responses
-        if not response.ok:
-            message = data.get("detail")
-            self.showError(message)
-            return
-
-        if not data["success"]:
-            self.showError(data.get("message"))
+        if not response["success"]:
+            self.showError(response["message"])
         else:
-            self.controller.userToken = data.get("token")
-            self.controller.username = data.get("username")
-            self.controller.showFrame("MessageBoard")
+            self.controller.username = username
+            self.controller.showFrame("Biometrics")
 
     def showError(self, message):
         self.errorLabel.configure(text=message)
