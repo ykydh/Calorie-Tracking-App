@@ -5,7 +5,6 @@ class SignUpScreen(ctk.CTkFrame):
     def __init__(self, master, controller):
         super().__init__(master)
         self.controller = controller
-        # self.signUpCaller = SignUpCaller()
         
         # Configure grid to center contents and scale with window
         self.grid_rowconfigure(0, weight=1)   # top spacer

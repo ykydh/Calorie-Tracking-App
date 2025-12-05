@@ -71,33 +71,33 @@ class Biometrics(ctk.CTkFrame):
 
         val = self.weightEntry.get()
         if len(val):
-            response = self.userSubmissions.updateWeight(self.controller.username, self.weightEntry.get())
+            response = self.userSubmissions.updateWeight(self.controller.username, val)
             if not response["success"]:
                 self.showError("Invalid weight")
 
         val = self.goalWeightEntry.get()
         if len(val):
-            response = self.userSubmissions.updateGoalWeight(self.controller.username, self.goalWeightEntry.get())
+            response = self.userSubmissions.updateGoalWeight(self.controller.username, val)
             if not response["success"]:
                 self.showError("Invalid goal weight")
 
         val = self.heightEntry.get()
         if len(val):
-            response = self.userSubmissions.updateHeight(self.controller.username, self.heightEntry.get())
+            response = self.userSubmissions.updateHeight(self.controller.username, val)
             if not response["success"]:
                 self.showError("Invalid height")
             
         val = self.heightEntry.get()
         if len(val):
-            response = self.userSubmissions.updateHeight(self.controller.username, self.heightEntry.get())
+            response = self.userSubmissions.updateHeight(self.controller.username, val)
             if not response["success"]:
                 self.showError("Invalid height")
         
         val = self.yearEntry.get() + '-' + self.monthEntry.get() + '-' + self.dayEntry.get()
         if len(val):
-            response = self.userSubmissions.changeDOB(self.controller.username, self.heightEntry.get())
+            response = self.userSubmissions.changeDOB(self.controller.username, val)
             if not response["success"]:
-                self.showError("Invalid date of birth")
+                self.showError(response["message"])
             
         
 
@@ -109,4 +109,4 @@ class Biometrics(ctk.CTkFrame):
         self.errorLabel.pack_forget()
         
     def handleEnter(self):
-        self.handleSignUp()
+        self.handleBiometrics()

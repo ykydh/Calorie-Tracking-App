@@ -22,7 +22,7 @@ class UpdateData:
         try:
             self.cursor.execute(
                 Queries.UPDATE_HEIGHT,
-                {"weight": height, "username": username}
+                {"height": height, "username": username}
             )
             self.conn.commit()
             return {"success": True}
@@ -33,7 +33,7 @@ class UpdateData:
         try:
             self.cursor.execute(
                 Queries.UPDATE_DOB,
-                {"weight": date, "username": username}
+                {"dob": date, "username": username}
             )
             self.conn.commit()
             return {"success": True}
@@ -44,7 +44,7 @@ class UpdateData:
         try:
             self.cursor.execute(
                 Queries.UPDATE_GOAL_WEIGHT,
-                {"weight": goalWeight, "username": username}
+                {"goalWeight": goalWeight, "username": username}
             )
             self.conn.commit()
             return {"success": True}
