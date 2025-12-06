@@ -66,6 +66,7 @@ class Queries:
         WHERE
             ATE_ON = :date AND
             OWNER_USERNAME = :username
+        
     """
 
     GET_LOG_INFO = """
@@ -80,6 +81,7 @@ class Queries:
         INNER JOIN Food f
             ON fl.FOOD_ID = f.FOOD_ID
         WHERE fl.LOG_ID = :logID
+        ORDER BY brand DESC
     """
 
     GET_DAILY_INFO = """

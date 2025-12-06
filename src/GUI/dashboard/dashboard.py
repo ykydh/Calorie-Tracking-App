@@ -127,6 +127,39 @@ class Dashboard(ctk.CTkFrame):
 
         self.weightGraph.bind("<Button-1>", lambda e: controller.showWeightScreen())
 
+    def addFoodLogToList(self, foodLog):
+        # Outer frame for each food log
+        logFrame = ctk.CTkFrame(self.foodListCanvas, corner_radius=10, fg_color="#2e2e2e")
+        logFrame.pack(fill="x", pady=5, padx=5)
+
+        # Left part: labels
+        labelsFrame = ctk.CTkFrame(logFrame, fg_color="transparent")
+        labelsFrame.pack(side="left", expand=True, fill="both", padx=5, pady=5)
+
+        brandLabel = ctk.CTkLabel(labelsFrame, text=foodLog.brand, font=("Arial", 12))
+        brandLabel.pack(anchor="w")
+
+        nameLabel = ctk.CTkLabel(labelsFrame, text=foodLog.name, font=("Arial", 20))
+        nameLabel.pack(anchor="w")
+
+        
+        infoLabel = ctk.CTkLabel(
+            labelsFrame, 
+            text=f"{foodLog.weight}g | {foodLog.calories:.2f}cal | {foodLog.protein:.2f}g protein | {foodLog.carbs:.2f}g carbs | {foodLog.fat:.2f}g fat", 
+            font=("Arial", 10)
+        )
+        infoLabel.pack(anchor="w")
+
+        # Right part: buttons
+        btnFrame = ctk.CTkFrame(logFrame, fg_color="transparent")
+        btnFrame.pack(side="right", padx=5, pady=5)
+
+        editBtn = ctk.CTkButton(btnFrame, text="✏️", width=30, height=30, command=lambda fl=foodLog: self.editFoodLog(fl))
+        editBtn.pack(pady=2)
+
+        deleteBtn = ctk.CTkButton(btnFrame, text="🗑️", width=30, height=30, command=lambda fl=foodLog: self.deleteFoodLog(fl))
+        deleteBtn.pack(pady=2)
+
     def previousDay(self):
         self.selectedDate -= timedelta(days=1)
         self.populateInfo()
@@ -150,6 +183,24 @@ class Dashboard(ctk.CTkFrame):
         self.dailyProtein = data["protein"]
         self.dailyCarbs = data["carbs"]
         self.dailyFats = data["fat"]
+        
+    def populateFoodInfo(self):
+        for widget in self.foodList.winfo_children():
+            widget.destroy()
+
+        self.foodListCanvas = ctk.CTkScrollableFrame(self.foodList)
+        self.foodListCanvas.pack(expand=True, fill="both", padx=10, pady=10)
+        
+        response = self.getData.getFoodLogsWithInfo(self.controller.username, self.selectedDate)
+        if not response["success"]:
+            print(response["success"])
+            return
+        
+        data = response["data"]
+        for foodLog in data:
+            self.addFoodLog(foodLog)
+            
+    
 
     def populateDailyInfo(self):
         response = self.getData.getDailyTotals(self.controller.username, self.selectedDate)
@@ -158,15 +209,20 @@ class Dashboard(ctk.CTkFrame):
             print(response["message"])
             return
         
-        calories = response["data"]["totalCalories"]
-        protein = response["data"]["totalProtein"]
-        carbs = response["data"]["totalCarbs"]
-        fat = response["data"]["totalFat"]
+        caloriesRemaining = self.dailyCalories - response["data"]["totalCalories"]
+        proteinRemaining = self.dailyProtein - response["data"]["totalProtein"]
+        carbsRemaining = self.dailyCarbs - response["data"]["totalCarbs"]
+        fatRemaining = self.dailyFats - response["data"]["totalFat"]
         
-        self.calRemaining.configure(text=f"Calories Remaining: {self.dailyCalories - calories}")
-        self.proteinRemaining.configure(text=f"Protein Remaining: {self.dailyProtein - protein}")
-        self.carbRemaining.configure(text=f"Carbs Remaining: {self.dailyCarbs - carbs}")
-        self.fatRemaining.configure(text=f"Fats Remaining: {self.dailyFats - fat}")
+        self.calRemaining.configure(text=f"Calories Remaining: {(caloriesRemaining):.2f}")
+        self.proteinRemaining.configure(text=f"Protein Remaining: {(proteinRemaining):.2f}")
+        self.carbRemaining.configure(text=f"Carbs Remaining: {(carbsRemaining):.2f}")
+        self.fatRemaining.configure(text=f"Fats Remaining: {(fatRemaining):.2f}")
+        
+        self.calBar.set(1 - (caloriesRemaining / self.dailyCalories))
+        self.proteinBar.set(1 - (proteinRemaining / self.dailyProtein))
+        self.carbsBar.set(1 - (carbsRemaining / self.dailyCarbs))
+        self.fatsBar.set(1 - (fatRemaining / self.dailyFats))
 
     def onShow(self):
         self.populateInfo()
