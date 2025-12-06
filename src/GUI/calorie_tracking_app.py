@@ -18,17 +18,18 @@ class CalorieTrackingApp(ctk.CTk):
         main.grid_rowconfigure(0, weight=1)
         main.grid_columnconfigure(0, weight=1)
         
+        self.username = None
+        self.userWeight = None
+        self.userHeight = None
+        self.userDOB = None
+        self.userGoalWeight = None
+        
         self.frames = {}
         for ScreenClass in (WelcomeScreen, LoginScreen, SignUpScreen, Dashboard, Biometrics):
             frame = ScreenClass(main, self)
             self.frames[ScreenClass.__name__] = frame
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.username = None
-        self.userWeight = None
-        self.userHeight = None
-        self.userDOB = None
-        self.userGoalWeight = None
         
         self.bind("<Return>", self.handleEnter)
 

@@ -8,27 +8,6 @@ class UpdateData:
         self.cursor = self.conn.cursor()
         self.cursor.execute("PRAGMA foreign_keys = ON;")
 
-    def updateWeight(self, username, weight):
-        try:
-            self.cursor.execute(
-                Queries.UPDATE_WEIGHT,
-                {"weight": weight, "username": username}
-            )
-            self.conn.commit()
-            return {"success": True}
-        except Exception as e:
-            return {"success": False, "message": str(e)}
-    def updateHeight(self, username, height):
-        try:
-            self.cursor.execute(
-                Queries.UPDATE_HEIGHT,
-                {"height": height, "username": username}
-            )
-            self.conn.commit()
-            return {"success": True}
-        except Exception as e:
-            return {"success": False, "message": str(e)}
-
     def updateDob(self, username, date):
         try:
             self.cursor.execute(
@@ -45,6 +24,17 @@ class UpdateData:
             self.cursor.execute(
                 Queries.UPDATE_GOAL_WEIGHT,
                 {"goalWeight": goalWeight, "username": username}
+            )
+            self.conn.commit()
+            return {"success": True}
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+        
+    def updateGoalDate(self, username, goalDate):
+        try:
+            self.cursor.execute(
+                Queries.UPDATE_GOAL_DATE,
+                {"goalDate": goalDate, "username": username}
             )
             self.conn.commit()
             return {"success": True}

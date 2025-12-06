@@ -26,10 +26,9 @@ def createDatabase():
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS User (
             USERNAME VARCHAR(80) PRIMARY KEY,
-            WEIGHT INTEGER,
-            HEIGHT INTEGER,
             DOB DATE,
             GOAL_WEIGHT INTEGER,
+            GOAL_DATE DATE,
             FOREIGN KEY (USERNAME) REFERENCES Account(USERNAME) ON DELETE CASCADE
         );
     """)
@@ -40,23 +39,14 @@ def createDatabase():
             FOOD_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             NAME TEXT,
             BRAND TEXT,
-            CALORIES REAL NOT NULL,
-            FAT REAL,
-            PROTEIN REAL,
-            CARBS REAL
-        );
-    """)
-
-    #Food Barcodes
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS Food_Barcodes (
-            BARCODE_ID INTEGER PRIMARY KEY,
-            FOOD_ID INTEGER NOT NULL,
-            FOREIGN KEY (FOOD_ID) REFERENCES Food(FOOD_ID) ON DELETE CASCADE
+            CALORIES DECIMAL(3,3) NOT NULL,
+            FAT DECIMAL(3,3),
+            PROTEIN DECIMAL(3,3),
+            CARBS DECIMAL(3,3)
         );
     """)
     
-    # Exercise
+    #Exercise
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS Exercise (
             EXERCISE_ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -91,7 +81,7 @@ def createDatabase():
             OWNER_USERNAME VARCHAR(80) NOT NULL,
             FOOD_ID INTEGER NOT NULL,
             WEIGHT INTEGER,
-            ATE_AT DATETIME,
+            ATE_ON DATE DEFAULT,
             FOREIGN KEY (OWNER_USERNAME) REFERENCES Account(USERNAME) ON DELETE CASCADE,
             FOREIGN KEY (FOOD_ID) REFERENCES Food(FOOD_ID) ON DELETE CASCADE
         );
@@ -103,9 +93,29 @@ def createDatabase():
             E_LOG_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             EXERCISE_ID INTEGER NOT NULL,
             OWNER_USERNAME VARCHAR(80) NOT NULL,
-            PERFORMED_AT DATETIME,
+            PERFORMED_ON DATE DEFAULT,
             FOREIGN KEY (OWNER_USERNAME) REFERENCES Account(USERNAME) ON DELETE CASCADE,
             FOREIGN KEY (EXERCISE_ID) REFERENCES Exercise(EXERCISE_ID) ON DELETE CASCADE
+        );
+    """)
+
+    #Weight Log
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Weight_Log (
+            W_LOG_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            OWNER_USERNAME VARCHAR(80) NOT NULL,
+            WEIGHT INT,
+            LOGGED_ON DATE
+        );
+    """)
+
+    #Height Log
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Height_Log (
+            H_LOG_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            OWNER_USERNAME VARCHAR(80) NOT NULL,
+            HEIGHT INT,
+            LOGGED_ON DATE
         );
     """)
 
@@ -115,6 +125,8 @@ def createDatabase():
 #Parameter Type: None, void function
 def clearDatabase():
     tables = [
+        "Height_Log",
+        "Weight_Log"
         "Lifting",
         "Cardio",
         "User",

@@ -3,6 +3,8 @@ from backend.api.db_interactions.get_data import GetData
 from backend.api.db_interactions.insert_data import InsertData
 from backend.api.db_interactions.update_data import UpdateData
 
+import math
+
 from datetime import datetime
 
 class UserSubmissions:
@@ -12,7 +14,7 @@ class UserSubmissions:
         self.getData = GetData()
         self.deleteData = DeleteData()
 
-    def updateWeight(self, username, weight):
+    def addWeightLog(self, username, weight):
         try:
             weight = int(weight)
         except ValueError:
@@ -21,9 +23,9 @@ class UserSubmissions:
         if weight > 2000 or weight < 10:
             return {"success": False, "message": "Weight is invalid"}
         
-        return self.updateData.updateWeight(username, weight)
+        return self.insertData.addWeightLog(username, weight)
 
-    def updateHeight(self, username, height):
+    def addHeightLog(self, username, height):
         try:
             height = int(height)
         except ValueError:
@@ -32,7 +34,7 @@ class UserSubmissions:
         if height > 240:
             return {"success": False, "message": "Height is invalid"}
         
-        return self.updateData.updateHeight(username, height)
+        return self.insertData.addHeightLog(username, height)
 
     def updateGoalWeight(self, username, goalWeight):
         try:
@@ -44,11 +46,57 @@ class UserSubmissions:
             return {"success": False, "message": "Goal weight is invalid"}
         
         return self.updateData.updateGoalWeight(username, goalWeight)
+    
+    def updateGoalDate(self, username, dateStr):
+        try:
+            date = datetime.strptime(dateStr, "%Y-%m-%d").date()
+        except ValueError:
+            return {"success": False, "message": "Goal date is invalid"}
+        
+        if date < datetime.now().date():
+            return {"success": False, "message": "Goal date is invalid"}
+        
+        return self.updateData.updateGoalDate(username, date)
 
     def changeDOB(self, username, dateStr):
         try:
             date = datetime.strptime(dateStr, "%Y-%m-%d").date()
         except ValueError:
-            return {"success": False, "message": "Date is invalid"}
+            return {"success": False, "message": "Date of birth is invalid"}
+        print(date)
+        
+        if date > datetime.now().date():
+            return {"success": False, "message": "Date of birth must be after today"}
 
         return self.updateData.updateDob(username, date)
+
+    def calculateInfoAtTime(self, username, date):
+        response = self.getData.getDataAtDate(username, datetime.strptime("2025-12-05", "%Y-%m-%d").date())
+        if not response["success"]:
+            return response
+        data = response["data"]
+        print(data["dob"])
+
+        dob = datetime.strptime(data["dob"], "%Y-%m-%d").date()
+        age = math.floor((date - dob).days / 365)
+
+        daysToGoal = (datetime.strptime(data["goalDate"], "%Y-%m-%d").date() - date).days
+
+        BMR = 4.536 * data["weight"] + 15.88 * data["height"] - 5 * age - 78
+        
+        energyExpenditure = BMR * 1.2
+
+        deficitPerDay = (data["goalWeight"] - data["weight"]) * 3500 / daysToGoal
+
+        calories = max(energyExpenditure - deficitPerDay, 0)
+        protein = .9 * data["weight"]
+        fat = calories * .25 / 9
+        carbs = (calories - (protein * 4 + fat * 9)) / 4
+
+        return {"success": True, "data": {
+                "calories": calories,
+                "protein": protein,
+                "carbs": carbs,
+                "fat": fat
+            }
+        }

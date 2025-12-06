@@ -38,7 +38,7 @@ def signUpRequest(email, username, password):
     
     hash = hashPassword(password)
 
-    return insertData.add_user(email, username, hash)
+    return insertData.addUser(email, username, hash)
 
 def isValidEmail(email):
     return bool(re.match(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$", email)) and len(email) < 255

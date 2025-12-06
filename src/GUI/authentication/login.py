@@ -54,10 +54,9 @@ class LoginScreen(ctk.CTkFrame):
         else:
             data = response
             self.controller.username = response["data"]["username"]
-            self.controller.userWeight = response["data"]["weight"]
-            self.controller.userHeight = response["data"]["Height"]
             self.controller.userDOB = response["data"]["dob"]
             self.controller.userGoalWeight = response["data"]["goalWeight"]
+            self.controller.userGoalWeight = response["data"]["goalDate"]
             self.controller.showFrame("Dashboard")
 
     def showError(self, message):
