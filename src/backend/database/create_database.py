@@ -1,4 +1,10 @@
-from database import createDatabase
+from database import createDatabase, clearDatabase, initalizeDatabase
 
-createDatabase()
-print("SUCCESSFULY CREATED")
+try:
+    clearDatabase()
+    createDatabase()
+    initalizeDatabase()
+    print("SUCCESSFULLY CREATED")
+except Exception as e:
+    clearDatabase()
+    raise(e)

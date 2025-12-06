@@ -63,7 +63,6 @@ class GetData:
         try:
             self.cursor.execute(Queries.GET_USER_INFO_AT_TIME, {"username": username , "date": date})
             data = self.cursor.fetchone()
-            print(data["dob"])
             return {"success": True, "data": data}
         except Exception as e:
             return {"success": False, "message": str(e)}
@@ -72,7 +71,6 @@ class GetData:
         try:
             self.cursor.execute(Queries.GET_USER_INFO_AT_TIME, {"username": username , "date": date})
             data = self.cursor.fetchone()
-            print(data["dob"])
             return {"success": True, "data": data}
         except Exception as e:
             return {"success": False, "message": str(e)}

@@ -61,7 +61,7 @@ class Queries:
     GET_FOOD_LOGS = """
         SELECT 
             LOG_ID AS logID,
-            FOOD_ID AS foodID,
+            FOOD_ID AS foodID
         FROM Food_Log
         WHERE
             ATE_ON = :date AND

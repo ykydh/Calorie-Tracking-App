@@ -2,6 +2,12 @@ import customtkinter as ctk
 from datetime import datetime, timedelta
 from backend.api.db_interactions.get_data import GetData
 from backend.api.user_submissions import UserSubmissions
+from GUI.dashboard.elements.insert_exercise_log import InsertExerciseLog
+from GUI.dashboard.elements.insert_exercise import InsertExercise
+from GUI.dashboard.elements.insert_food_log import InsertFoodLog
+from GUI.dashboard.elements.insert_food import InsertFood
+from GUI.dashboard.elements.insert_weight_log import InsertWeightLog
+from GUI.dashboard.elements.profile import Profile
 
 class Dashboard(ctk.CTkFrame):
     def __init__(self, master, controller):
@@ -171,6 +177,7 @@ class Dashboard(ctk.CTkFrame):
     def populateInfo(self):
         self.updateDailyLimits()
         self.populateDailyInfo()
+        self.populateFoodInfo()
 
     def updateDailyLimits(self):
         response = self.userSubmissions.calculateInfoAtTime(self.controller.username, self.selectedDate)
@@ -193,7 +200,7 @@ class Dashboard(ctk.CTkFrame):
         
         response = self.getData.getFoodLogsWithInfo(self.controller.username, self.selectedDate)
         if not response["success"]:
-            print(response["success"])
+            print(response["message"])
             return
         
         data = response["data"]

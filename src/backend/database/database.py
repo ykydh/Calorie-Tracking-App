@@ -39,7 +39,7 @@ def createDatabase():
             FOOD_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             NAME TEXT,
             BRAND TEXT,
-            CALORIES DECIMAL(3,3) NOT NULL,
+            CALORIES DECIMAL(4,3) NOT NULL,
             FAT DECIMAL(3,3),
             PROTEIN DECIMAL(3,3),
             CARBS DECIMAL(3,3)
@@ -145,5 +145,129 @@ def clearDatabase():
     
     conn.commit()
 
+def initalizeDatabase():
+    testPassHash = "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"  # "test"
 
-# def initalizeDatabase():
+    # Food Samples
+    foods = [
+        ("bread", "wonder", 2.456, .026, .509, .088),
+        ("sirloin tip steak", "beef choice", 2.143, .143, 0, .196),
+        ("eggs", "great value", 1.4, .1, 0, .12),
+        ("whole milk", "central dairy", .625, .033, .05, .033),
+        ("butter", "land o lakes", 7.143, .786, 0, 0),
+        ("sugar", "in the raw", 3.75, 0, 1, 0),
+        ("flour", "bobs red mill", 3.529, .015, .735, .118)
+    ]
+
+    cursor.executemany(
+        """
+            INSERT INTO Food (NAME, BRAND, CALORIES, FAT, CARBS, PROTEIN)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """,
+        foods
+    )
+
+    # Account
+    cursor.execute(
+        f"""
+            INSERT INTO Account (USERNAME, EMAIL, PASSWORD_HASH)
+            VALUES ("test", "test@test.com", "{testPassHash}")
+        """
+    )
+
+    # User
+    cursor.execute(
+        """
+            INSERT INTO User (USERNAME, DOB, GOAL_WEIGHT, GOAL_DATE)
+            VALUES ("test", "2004-01-01", 180, "2026-06-01")
+        """
+    )
+
+    # Exercises
+    cursor.executemany(
+        """INSERT INTO Exercise (TYPE) VALUES (?)""",
+        [
+            ("C",),  # Cardio
+            ("C",),  # Cardio
+            ("L",),  # Lifting
+            ("L",)   # Lifting
+        ]
+    )
+
+    # Cardio
+    cursor.execute(
+        """
+            INSERT INTO Cardio (CARDIO_ID, NAME, CALORIES_BURNED_PER_MINUTE)
+            VALUES (1, "Running", 12)
+        """
+    )
+    cursor.execute(
+        """
+            INSERT INTO Cardio (CARDIO_ID, NAME, CALORIES_BURNED_PER_MINUTE)
+            VALUES (2, "Cycling", 8)
+        """
+    )
+
+    # Lifting
+    cursor.execute(
+        """
+            INSERT INTO Lifting (LIFT_ID, NAME, MUSCLES_WORKED)
+            VALUES (3, "Bench Press", "Chest, Triceps")
+        """
+    )
+    cursor.execute(
+        """
+            INSERT INTO Lifting (LIFT_ID, NAME, MUSCLES_WORKED)
+            VALUES (4, "Squat", "Legs, Glutes")
+        """
+    )
+
+    # Food Log
+    cursor.executemany(
+        """
+            INSERT INTO Food_Log (OWNER_USERNAME, FOOD_ID, WEIGHT, ATE_ON)
+            VALUES ("test", ?, ?, ?)
+        """,
+        [
+            (1, 50, "2025-01-01"),
+            (2, 200, "2025-01-01"),
+            (3, 60, "2025-01-02")
+        ]
+    )
+
+    # Exercise Log
+    cursor.executemany(
+        """
+            INSERT INTO Exercise_Log (EXERCISE_ID, OWNER_USERNAME, PERFORMED_ON)
+            VALUES (?, "test", ?)
+        """,
+        [
+            (1, "2025-01-01"),  # Running
+            (3, "2025-01-02")   # Bench Press
+        ]
+    )
+
+    # Weight log
+    cursor.executemany(
+        """
+            INSERT INTO Weight_Log (OWNER_USERNAME, WEIGHT, LOGGED_ON)
+            VALUES ("test", ?, ?)
+        """,
+        [
+            (190, "2025-01-01"),
+            (188, "2025-02-01")
+        ]
+    )
+
+    # Height log
+    cursor.executemany(
+        """
+            INSERT INTO Height_Log (OWNER_USERNAME, HEIGHT, LOGGED_ON)
+            VALUES ("test", ?, ?)
+        """,
+        [
+            (70, "2025-01-01")  # 70 inches
+        ]
+    )
+
+    conn.commit()

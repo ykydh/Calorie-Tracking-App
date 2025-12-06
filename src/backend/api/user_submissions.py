@@ -63,7 +63,6 @@ class UserSubmissions:
             date = datetime.strptime(dateStr, "%Y-%m-%d").date()
         except ValueError:
             return {"success": False, "message": "Date of birth is invalid"}
-        print(date)
         
         if date > datetime.now().date():
             return {"success": False, "message": "Date of birth must be after today"}
@@ -75,7 +74,6 @@ class UserSubmissions:
         if not response["success"]:
             return response
         data = response["data"]
-        print(data["dob"])
 
         dob = datetime.strptime(data["dob"], "%Y-%m-%d").date()
         age = math.floor((date - dob).days / 365)
