@@ -107,7 +107,8 @@ def createDatabase():
             W_LOG_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             OWNER_USERNAME VARCHAR(80) NOT NULL,
             WEIGHT INT,
-            LOGGED_ON DATE
+            LOGGED_ON DATE,
+            FOREIGN KEY (OWNER_USERNAME) REFERENCES Account(USERNAME) ON DELETE CASCADE
         );
     """)
 
@@ -117,7 +118,8 @@ def createDatabase():
             H_LOG_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             OWNER_USERNAME VARCHAR(80) NOT NULL,
             HEIGHT INT,
-            LOGGED_ON DATE
+            LOGGED_ON DATE,
+            FOREIGN KEY (OWNER_USERNAME) REFERENCES Account(USERNAME) ON DELETE CASCADE
         );
     """)
 
