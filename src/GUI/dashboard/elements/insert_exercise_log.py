@@ -89,14 +89,16 @@ class InsertExerciseLog(ctk.CTkFrame):
                     exerciseMap["exerciseID"],
                     exerciseMap["name"],
                     exerciseMap["exerciseID"],
-                    exerciseMap["caloriesPerMinute"]
+                    exerciseMap["caloriesPerMinute"],
+                    None
                 )
             else:
                 exercise = Lift(
                     exerciseMap["exerciseID"],
                     exerciseMap["name"],
                     exerciseMap["exerciseID"],
-                    exerciseMap["musclesWorked"]
+                    exerciseMap["musclesWorked"],
+                    None
                 )
 
             btn = ctk.CTkButton(
@@ -152,3 +154,7 @@ class InsertExerciseLog(ctk.CTkFrame):
             raise response["message"]
 
         self.controller.showFrame("Dashboard")
+        
+    def clearInput(self):
+        self.nameEntry.delete(0, "end")
+        self.minutesEntry.delete(0, "end")

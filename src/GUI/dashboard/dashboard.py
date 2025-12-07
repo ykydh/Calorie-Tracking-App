@@ -81,7 +81,7 @@ class Dashboard(ctk.CTkFrame):
         nextDateBtn.grid(row=0, column=3, sticky="w")
 
         # Profile Button
-        profileBtn = ctk.CTkButton(toolbar, text="👤", width=50, height=50, command=None)
+        profileBtn = ctk.CTkButton(toolbar, text="👤", width=50, height=50, command=self.showProfile)
         profileBtn.grid(row=0, column=4, sticky="ne")
 
         # Container for top half of right side container
@@ -363,3 +363,73 @@ class Dashboard(ctk.CTkFrame):
 
     def openInsertWeightLog(self):
         self.controller.showFrame("InsertWeightLog")
+        
+    def deleteFoodLog(self, log):
+        response = self.userSubmissions.deleteFoodLog(log.logID)
+        if response["success"]:
+            self.populateInfo()
+        else:
+            raise(response["message"])
+        
+    def deleteExerciseLog(self, log):
+        response = self.userSubmissions.deleteExerciseLog(log.logID)
+        if response["success"]:
+            self.populateInfo()
+        else:
+            raise(response["message"])
+        
+    def showProfile(self):
+        self.controller.showFrame("Profile")
+        
+    def editFoodLog(self, log):
+        # Ask for new weight in grams
+        popup = ctk.CTkInputDialog(text=f"Edit weight for {log.name} (current: {log.weight}g):", title="Edit Food Log")
+        newWeight = popup.get_input()
+
+        # Cancelled
+        if newWeight is None:
+            return
+
+        # Validate
+        try:
+            newWeight = float(newWeight)
+            if newWeight <= 0:
+                raise Exception()
+        except:
+            ctk.CTkLabel(self.foodList, text="Invalid weight!", text_color="red").pack()
+            return
+
+        # Update log
+        response = self.userSubmissions.updateFoodLog(log.logID, newWeight)
+
+        if not response["success"]:
+            raise Exception(response["message"])
+
+        self.populateInfo()
+        
+    def editExerciseLog(self, log):
+        # Ask for new time
+        popup = ctk.CTkInputDialog(text=f"Edit time for {log.name} (current: {log.minutes}min):", title="Edit Exercise Log")
+        newTime = popup.get_input()
+
+        # Cancelled
+        if newTime is None:
+            return
+
+        # Validate
+        try:
+            newTime = float(newTime)
+            if newTime <= 0:
+                raise Exception()
+        except:
+            ctk.CTkLabel(self.exerciseList, text="Invalid time!", text_color="red").pack()
+            return
+
+        # Update log
+        response = self.userSubmissions.updateExerciseLog(log.logID, newTime)
+
+        if not response["success"]:
+            raise Exception(response["message"])
+
+        self.populateInfo()
+

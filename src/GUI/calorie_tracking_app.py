@@ -26,10 +26,6 @@ class CalorieTrackingApp(ctk.CTk):
         main.grid_columnconfigure(0, weight=1)
         
         self.username = None
-        self.userWeight = None
-        self.userHeight = None
-        self.userDOB = None
-        self.userGoalWeight = None
         self.selectedDate = datetime.now().date()
         
         self.frames = {}
@@ -56,3 +52,12 @@ class CalorieTrackingApp(ctk.CTk):
     def handleEnter(self, event=None):
         if hasattr(self.currFrame, "handleEnter"):
             self.currFrame.handleEnter()
+        if hasattr(self.currFrame, "clearInput"):
+            self.currFrame.clearInput()
+            
+    def logout(self):
+        for frame in self.frames.values():
+            if hasattr(frame, "clearInput"):
+                frame.clearInput()
+        self.showFrame("WelcomeScreen")
+        self.selectedDate = datetime.now().date()

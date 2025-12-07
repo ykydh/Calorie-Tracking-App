@@ -68,3 +68,7 @@ class LoginScreen(ctk.CTkFrame):
         
     def handleEnter(self):
         self.handleLogin()
+        
+    def clearInput(self):
+        self.passwordEntry.delete(0, "end")
+        self.credentialEntry.delete(0, "end")

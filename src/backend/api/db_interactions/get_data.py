@@ -98,7 +98,8 @@ class GetData:
                             log["minutes"],
                             cardioInfo["name"],
                             log["exerciseID"],
-                            cardioInfo["cbpm"]
+                            cardioInfo["cbpm"],
+                            log["logID"]
                         )
                     )
                 elif log["type"] == 'l':
@@ -109,7 +110,8 @@ class GetData:
                             log["minutes"],
                             liftInfo["name"],
                             log["exerciseID"],
-                            liftInfo["musclesWorked"]
+                            liftInfo["musclesWorked"],
+                            log["logID"]
                         )
                     )
             return {"success": True, "data": exercises}
@@ -136,6 +138,14 @@ class GetData:
         try:
             self.cursor.execute(Queries.GET_WEIGHT_LOGS, {"username": username})
             data = self.cursor.fetchall()
+            return {"success": True, "data": data}
+        except Exception as e:
+            return {"success": False, "message": e}
+        
+    def getDobAndHeight(self, username):
+        try:
+            self.cursor.execute(Queries.GET_DOB_AND_HEIGHT, {"username": username})
+            data = self.cursor.fetchone()
             return {"success": True, "data": data}
         except Exception as e:
             return {"success": False, "message": e}

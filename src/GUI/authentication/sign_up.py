@@ -69,3 +69,8 @@ class SignUpScreen(ctk.CTkFrame):
         
     def handleEnter(self):
         self.handleSignUp()
+        
+    def clearInput(self):
+        self.emailEntry.delete(0, "end")
+        self.passwordEntry.delete(0, "end")
+        self.usernameEntry.delete(0, "end")

@@ -49,7 +49,7 @@ class InsertFoodLog(ctk.CTkFrame):
         createFoodBtn = ctk.CTkButton(
             left,
             text="Create New Food",
-            command=lambda: controller.showCreateFoodScreen()
+            command=lambda: controller.showFrame("InsertFood")
         )
         createFoodBtn.pack(side="left", expand=True, fill="x", padx=(5, 0))
 
@@ -66,7 +66,6 @@ class InsertFoodLog(ctk.CTkFrame):
 
         self.weightEntry = ctk.CTkEntry(self.right, placeholder_text="Enter weight in grams")
         self.submitBtn = ctk.CTkButton(self.right, text="Submit", command=self.submitFoodLog)
-
 
     def searchFoods(self):
         brand = self.brandEntry.get()
@@ -142,6 +141,10 @@ class InsertFoodLog(ctk.CTkFrame):
 
         if not response["success"]:
             raise response["message"]
-            return
 
         self.controller.showFrame("Dashboard")
+        
+    def clearInput(self):
+        self.nameEntry.delete(0, "end")
+        self.brandEntry.delete(0, "end")
+        self.weightEntry.delete(0, "end")

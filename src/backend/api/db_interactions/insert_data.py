@@ -15,7 +15,7 @@ class InsertData:
 
     def addUser(self, email, username, hash):
         try:
-            with self.conn:  # auto commit / rollback
+            with self.conn:
                 self.conn.execute(
                     Queries.INSERT_USER_TO_ACCOUNT,
                     {"email": email, "username": username, "hash": hash}
@@ -100,6 +100,24 @@ class InsertData:
                 self.conn.execute(
                     Queries.INSERT_CARDIO,
                     {"name": name, "cbpm": cbpm}
+                )
+            return {"success": True}
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+        
+    def insertFood(self, name, brand, unitCals, unitProtein, unitCarbs, unitFat):
+        try:
+            with self.conn:
+                self.conn.execute(
+                    Queries.INSERT_FOOD,
+                    {
+                        "name": name,
+                        "brand": brand,
+                        "unitCals": unitCals,
+                        "unitProtein": unitProtein,
+                        "unitCarbs": unitCarbs,
+                        "unitFat": unitFat
+                    }
                 )
             return {"success": True}
         except Exception as e:

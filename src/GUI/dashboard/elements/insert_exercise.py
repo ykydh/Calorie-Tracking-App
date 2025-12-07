@@ -106,3 +106,10 @@ class InsertExercise(ctk.CTkFrame):
 
         # Return to previous screen
         self.controller.showFrame("InsertExerciseLog")
+    
+    def clearInput(self):
+        self.nameEntry.delete(0, "end")
+        if not self.calsEntry is None:
+            self.calsEntry.delete(0, "end")
+        if not self.muscleEntry is None:
+            self.muscleEntry.delete(0, "end")

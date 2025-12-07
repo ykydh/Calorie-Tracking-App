@@ -156,3 +156,14 @@ class Biometrics(ctk.CTkFrame):
         
     def handleEnter(self):
         self.handleBiometrics()
+        
+    def clearInput(self):
+        self.dayEntry.delete(0, "end")
+        self.yearEntry.delete(0, "end")
+        self.monthEntry.delete(0, "end")
+        self.heightEntry.delete(0, "end")
+        self.weightEntry.delete(0, "end")
+        self.goalDayEntry.delete(0, "end")
+        self.goalYearEntry.delete(0, "end")
+        self.goalMonthEntry.delete(0, "end")
+        self.goalWeightEntry.delete(0, "end")

@@ -45,3 +45,5 @@ class InsertWeightLog(ctk.CTkFrame):
 
         # Return to dashboard
         self.controller.showFrame("Dashboard")
+    def clearInput(self):
+        self.weightEntry.delete(0, "end")

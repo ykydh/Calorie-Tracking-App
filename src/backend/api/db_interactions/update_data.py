@@ -40,3 +40,25 @@ class UpdateData:
             return {"success": True}
         except Exception as e:
             return {"success": False, "message": str(e)}
+        
+    def updateFoodLog(self, logID, newWeight):
+        try:
+            self.cursor.execute(
+                Queries.UPDATE_FOOD_LOG,
+                {"logID": logID, "newWeight": newWeight}
+            )
+            self.conn.commit()
+            return {"success": True}
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+        
+    def updateExerciseLog(self, logID, newTime):
+        try:
+            self.cursor.execute(
+                Queries.UPDATE_EXERCISE_LOG,
+                {"logID": logID, "newTime": newTime}
+            )
+            self.conn.commit()
+            return {"success": True}
+        except Exception as e:
+            return {"success": False, "message": str(e)}
