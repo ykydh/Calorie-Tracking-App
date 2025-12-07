@@ -14,6 +14,7 @@ class UserSubmissions:
         self.getData = GetData()
         self.deleteData = DeleteData()
 
+    
     def addWeightLog(self, username, weight):
         try:
             weight = int(weight)

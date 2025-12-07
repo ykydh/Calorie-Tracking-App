@@ -43,11 +43,7 @@ class InsertExerciseLog(ctk.CTkFrame):
         self.resultsBox = ctk.CTkScrollableFrame(resultsFrame, width=300)
         self.resultsBox.pack(expand=True, fill="both")
 
-        createExerciseBtn = ctk.CTkButton(
-            left,
-            text="Create New Exercise",
-            command=lambda: controller.showFrame("InsertExercise")
-        )
+        createExerciseBtn = ctk.CTkButton(left, text="Create New Exercise", command=lambda: controller.showFrame("InsertExercise"))
         createExerciseBtn.pack(side="left", expand=True, fill="x", padx=(5, 0))
 
         # Right panel
@@ -120,17 +116,9 @@ class InsertExerciseLog(ctk.CTkFrame):
         self.rightTitle.configure(text=f"{exercise.name}")
 
         if isinstance(exercise, Cardio):
-            ctk.CTkLabel(
-                self.infoFrame,
-                text=f"Calories/min: {exercise.cbpm:.2f}",
-                font=("Arial", 16)
-            ).pack(anchor="w")
+            ctk.CTkLabel(self.infoFrame, text=f"Calories/min: {exercise.cbpm:.2f}", font=("Arial", 16)).pack(anchor="w")
         else:
-            ctk.CTkLabel(
-                self.infoFrame,
-                text=f"Muscles worked: {exercise.musclesWorked}",
-                font=("Arial", 16)
-            ).pack(anchor="w")
+            ctk.CTkLabel(self.infoFrame, text=f"Muscles worked: {exercise.musclesWorked}", font=("Arial", 16)).pack(anchor="w")
 
         self.minutesEntry.pack(pady=10)
         self.submitBtn.pack(pady=5)
@@ -143,12 +131,7 @@ class InsertExerciseLog(ctk.CTkFrame):
         minutes = int(self.minutesEntry.get())
         exerciseID = self.selectedExercise.exerciseID
 
-        response = self.userSubmissions.insertExerciseLog(
-            self.controller.username,
-            exerciseID,
-            minutes,
-            self.controller.selectedDate
-        )
+        response = self.userSubmissions.insertExerciseLog(self.controller.username, exerciseID,minutes, self.controller.selectedDate)
 
         if not response["success"]:
             raise response["message"]

@@ -293,11 +293,7 @@ class Dashboard(ctk.CTkFrame):
         textFrame.pack(side="left", expand=True, fill="both", padx=5, pady=5)
 
         ctk.CTkLabel(textFrame, text=log.name, font=("Arial", 18)).pack(anchor="w")
-        ctk.CTkLabel(
-            textFrame,
-            text=f"{log.minutes}min | {log.getInfo()}",
-            font=("Arial", 12)
-        ).pack(anchor="w")
+        ctk.CTkLabel(textFrame, text=f"{log.minutes}min | {log.getInfo()}", font=("Arial", 12)).pack(anchor="w")
 
         # Right button area
         btnFrame = ctk.CTkFrame(logFrame, fg_color="transparent")

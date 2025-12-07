@@ -8,6 +8,7 @@ class UpdateData:
         self.cursor = self.conn.cursor()
         self.cursor.execute("PRAGMA foreign_keys = ON;")
 
+    # Updates date of birth for specified user 
     def updateDob(self, username, date):
         try:
             self.cursor.execute(
@@ -19,6 +20,7 @@ class UpdateData:
         except Exception as e:
             return {"success": False, "message": str(e)}
 
+    # Updates goal weight for specified user 
     def updateGoalWeight(self, username, goalWeight):
         try:
             self.cursor.execute(
@@ -30,6 +32,7 @@ class UpdateData:
         except Exception as e:
             return {"success": False, "message": str(e)}
         
+    # Updates goal date for specified user 
     def updateGoalDate(self, username, goalDate):
         try:
             self.cursor.execute(
@@ -41,6 +44,7 @@ class UpdateData:
         except Exception as e:
             return {"success": False, "message": str(e)}
         
+    # Updates food log for specified user 
     def updateFoodLog(self, logID, newWeight):
         try:
             self.cursor.execute(
@@ -52,6 +56,7 @@ class UpdateData:
         except Exception as e:
             return {"success": False, "message": str(e)}
         
+    # Updates exercise log for specified user 
     def updateExerciseLog(self, logID, newTime):
         try:
             self.cursor.execute(

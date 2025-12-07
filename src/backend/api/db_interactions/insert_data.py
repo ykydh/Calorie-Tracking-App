@@ -13,6 +13,7 @@ class InsertData:
         self.conn.execute("PRAGMA journal_mode = WAL;")
         self.conn.execute("PRAGMA busy_timeout = 3000;")
 
+    # Adds user to both account and user tables
     def addUser(self, email, username, hash):
         try:
             with self.conn:
@@ -28,6 +29,7 @@ class InsertData:
         except Exception as e:
             return {"success": False, "message": str(e)}
 
+    # Adds weight log for a user
     def addWeightLog(self, username, weight):
         try:
             with self.conn:
@@ -39,6 +41,7 @@ class InsertData:
         except Exception as e:
             return {"success": False, "message": str(e)}
 
+    # Adds height log for a user
     def addHeightLog(self, username, height):
         try:
             with self.conn:
@@ -50,6 +53,7 @@ class InsertData:
         except Exception as e:
             return {"success": False, "message": str(e)}
 
+    # Inserts a food log for specified user
     def insertFoodLog(self, username, foodID, weight, date):
         try:
             with self.conn:
@@ -61,6 +65,7 @@ class InsertData:
         except Exception as e:
             return {"success": False, "message": str(e)}
         
+    # Inserts exercise log for specified user
     def insertExerciseLog(self, username, exerciseID, minutes, date):
         try:
             with self.conn:
@@ -72,6 +77,7 @@ class InsertData:
         except Exception as e:
             return {"success": False, "message": str(e)}
         
+    # Inserts weight log for specified user
     def insertWeightLog(self, username, weight, date):
         try:
             with self.conn:
@@ -83,6 +89,7 @@ class InsertData:
         except Exception as e:
             return {"success": False, "message": str(e)}
         
+    # Inserts lift
     def insertLift(self, name, musclesWorked):
         try:
             with self.conn:
@@ -94,6 +101,7 @@ class InsertData:
         except Exception as e:
             return {"success": False, "message": str(e)}
 
+    # Inserts cardio
     def insertCardio(self, name, cbpm):
         try:
             with self.conn:
@@ -105,6 +113,7 @@ class InsertData:
         except Exception as e:
             return {"success": False, "message": str(e)}
         
+    # Inserts food
     def insertFood(self, name, brand, unitCals, unitProtein, unitCarbs, unitFat):
         try:
             with self.conn:

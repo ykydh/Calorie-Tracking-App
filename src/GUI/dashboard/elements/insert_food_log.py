@@ -46,11 +46,7 @@ class InsertFoodLog(ctk.CTkFrame):
         self.resultsBox.pack(expand=True, fill="both")
 
         # Button to create a food
-        createFoodBtn = ctk.CTkButton(
-            left,
-            text="Create New Food",
-            command=lambda: controller.showFrame("InsertFood")
-        )
+        createFoodBtn = ctk.CTkButton(left, text="Create New Food", command=lambda: controller.showFrame("InsertFood"))
         createFoodBtn.pack(side="left", expand=True, fill="x", padx=(5, 0))
 
         # Right panel
@@ -132,12 +128,7 @@ class InsertFoodLog(ctk.CTkFrame):
         weight = int(self.weightEntry.get())
         foodId = self.selectedFood.foodID
 
-        response = self.userSubmissions.insertFoodLog(
-            self.controller.username,
-            foodId,
-            weight,
-            self.controller.selectedDate
-        )
+        response = self.userSubmissions.insertFoodLog(self.controller.username, foodId, weight, self.controller.selectedDate)
 
         if not response["success"]:
             raise response["message"]
