@@ -1,6 +1,8 @@
 import sqlite3
 from backend.api.db_interactions.queries import Queries
 from backend.objects.food_log import FoodLog
+from backend.objects.exercise.cardio import Cardio
+from backend.objects.exercise.lift import Lift
 
 class GetData:
     def __init__(self):
@@ -15,7 +17,7 @@ class GetData:
             data = self.cursor.fetchone()
             return {"success": True, "data": data}
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {"success": False, "message": e}
     
     def getUserWithEmail(self, email):
         try:
@@ -23,7 +25,7 @@ class GetData:
             data = self.cursor.fetchone()
             return {"success": True, "data": data}
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {"success": False, "message": e}
     
     def getFoodLogsWithInfo(self, username, date):
         logsWithInfo = []
@@ -31,25 +33,24 @@ class GetData:
         try:
             self.cursor.execute(Queries.GET_FOOD_LOGS, {"username": username , "date": date})
             logs = self.cursor.fetchall()
-
             for log in logs:
                 self.cursor.execute(Queries.GET_LOG_INFO, {"logID": log["logID"]})
                 logInfo = self.cursor.fetchone()
-                logsWithInfo.append(
-                    FoodLog(
-                        log["logID"],
-                        logInfo["name"],
-                        logInfo["brand"],
-                        logInfo["weight"],
-                        logInfo["logCalories"],
-                        logInfo["logProtein"],
-                        logInfo["logCarbs"],
-                        logInfo["logFat"]
-                    )
+                foodLog = FoodLog(
+                    log["logID"],
+                    logInfo["name"],
+                    logInfo["brand"],
+                    logInfo["weight"],
+                    logInfo["logCalories"],
+                    logInfo["logProtein"],
+                    logInfo["logCarbs"],
+                    logInfo["logFat"]
                 )
+                logsWithInfo.append(foodLog)
+
             return {"success": True, "data": logsWithInfo}
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {"success": False, "message": e}
 
     def getDailyTotals(self, username, date):
         try:
@@ -57,7 +58,7 @@ class GetData:
             data = self.cursor.fetchone()
             return {"success": True, "data": data}
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {"success": False, "message": e}
         
     def getDataAtDate(self, username, date):
         try:
@@ -65,7 +66,7 @@ class GetData:
             data = self.cursor.fetchone()
             return {"success": True, "data": data}
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {"success": False, "message": e}
         
     def getFoodLogsOnDate(self, username, date):
         try:
@@ -73,4 +74,68 @@ class GetData:
             data = self.cursor.fetchone()
             return {"success": True, "data": data}
         except Exception as e:
-            return {"success": False, "message": str(e)}
+            return {"success": False, "message": e}
+        
+    def getFoodLike(self, brand, name):
+        try:
+            self.cursor.execute(Queries.GET_FOODS_LIKE, {"brand": brand, "name": name})
+            data = self.cursor.fetchall()
+            return {"success": True, "data": data}
+        except Exception as e:
+            return {"success": False, "message": e}
+        
+    def getExerciseLogs(self, username, date):
+        try:
+            self.cursor.execute(Queries.GET_EXERCISE_LOGS_ON, {"username": username, "date": date})
+            logs = self.cursor.fetchall()
+            exercises = []
+            for log in logs:
+                if log["type"] == 'c':
+                    self.cursor.execute(Queries.GET_CARDIO, {"id": log["exerciseID"]})
+                    cardioInfo = self.cursor.fetchone()
+                    exercises.append(
+                        Cardio (
+                            log["minutes"],
+                            cardioInfo["name"],
+                            log["exerciseID"],
+                            cardioInfo["cbpm"]
+                        )
+                    )
+                elif log["type"] == 'l':
+                    self.cursor.execute(Queries.GET_LIFT, {"id": log["exerciseID"]})
+                    liftInfo = self.cursor.fetchone()
+                    exercises.append(
+                        Lift (
+                            log["minutes"],
+                            liftInfo["name"],
+                            log["exerciseID"],
+                            liftInfo["musclesWorked"]
+                        )
+                    )
+            return {"success": True, "data": exercises}
+        except Exception as e:
+            return {"success": False, "message": e}
+        
+    def getCaloriesBurnedOnDate(self, username, date):
+        try:
+            self.cursor.execute(Queries.GET_CALORIES_BURNED_ON, {"username": username, "date": date})
+            data = self.cursor.fetchone()
+            return {"success": True, "data": data}
+        except Exception as e:
+            return {"success": False, "message": e}
+        
+    def getExercisesLike(self, name):
+        try:
+            self.cursor.execute(Queries.GET_EXERCISES_LIKE, {"name": name})
+            data = self.cursor.fetchall()
+            return {"success": True, "data": data}
+        except Exception as e:
+            return {"success": False, "message": e}
+        
+    def getWeightLogs(self, username):
+        try:
+            self.cursor.execute(Queries.GET_WEIGHT_LOGS, {"username": username})
+            data = self.cursor.fetchall()
+            return {"success": True, "data": data}
+        except Exception as e:
+            return {"success": False, "message": e}

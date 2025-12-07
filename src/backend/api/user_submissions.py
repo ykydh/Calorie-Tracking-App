@@ -70,10 +70,13 @@ class UserSubmissions:
         return self.updateData.updateDob(username, date)
 
     def calculateInfoAtTime(self, username, date):
-        response = self.getData.getDataAtDate(username, datetime.strptime("2025-12-05", "%Y-%m-%d").date())
+        response = self.getData.getDataAtDate(username, date)
         if not response["success"]:
             return response
         data = response["data"]
+
+        if data["weight"] is None or data["height"] is None:
+            return {"success": False, "message": "No data on date"}
 
         dob = datetime.strptime(data["dob"], "%Y-%m-%d").date()
         age = math.floor((date - dob).days / 365)
@@ -91,10 +94,37 @@ class UserSubmissions:
         fat = calories * .25 / 9
         carbs = (calories - (protein * 4 + fat * 9)) / 4
 
-        return {"success": True, "data": {
-                "calories": calories,
+        response = self.getData.getCaloriesBurnedOnDate(username, date)
+
+        if not response["success"]:
+            return {"success": False, "message": "No data on date"}
+        
+        if not response["data"]["totalCalsBurned"]:
+            calsBurned = 0
+        else:
+            calsBurned = response["data"]["totalCalsBurned"]
+
+        return {
+            "success": True, 
+            "data": {
+                "calories": calories + calsBurned,
                 "protein": protein,
                 "carbs": carbs,
                 "fat": fat
             }
         }
+    
+    def insertFoodLog(self, username, foodID, weight, date):
+        return self.insertData.insertFoodLog(username, foodID, weight, date)
+    
+    def insertExerciseLog(self, username, exerciseID, minutes, date):
+        return self.insertData.insertExerciseLog(username, exerciseID, minutes, date)
+    
+    def insertWeightLog(self, username, weight, date):
+        return self.insertData.insertWeightLog(username, weight, date)
+    
+    def insertExercise(self, name, type, cbpm, musclesWorked):
+        if type == 'l':
+            return self.insertData.insertLift(name, musclesWorked)
+        else:
+            return self.insertData.insertCardio(name, cbpm)

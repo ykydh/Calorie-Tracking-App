@@ -4,6 +4,13 @@ from GUI.authentication.login import LoginScreen
 from GUI.authentication.sign_up import SignUpScreen
 from GUI.dashboard.dashboard import Dashboard
 from GUI.auxillary.biometrics import Biometrics
+from GUI.dashboard.elements.insert_exercise_log import InsertExerciseLog
+from GUI.dashboard.elements.insert_exercise import InsertExercise
+from GUI.dashboard.elements.insert_food_log import InsertFoodLog
+from GUI.dashboard.elements.insert_food import InsertFood
+from GUI.dashboard.elements.insert_weight_log import InsertWeightLog
+from GUI.dashboard.elements.profile import Profile
+from datetime import datetime
 
 class CalorieTrackingApp(ctk.CTk):
     def __init__(self):
@@ -23,9 +30,10 @@ class CalorieTrackingApp(ctk.CTk):
         self.userHeight = None
         self.userDOB = None
         self.userGoalWeight = None
+        self.selectedDate = datetime.now().date()
         
         self.frames = {}
-        for ScreenClass in (WelcomeScreen, LoginScreen, SignUpScreen, Dashboard, Biometrics):
+        for ScreenClass in (WelcomeScreen, LoginScreen, SignUpScreen, Dashboard, Biometrics, InsertExerciseLog, InsertFoodLog, InsertWeightLog, InsertExercise, InsertFood, Profile):
             frame = ScreenClass(main, self)
             self.frames[ScreenClass.__name__] = frame
             frame.grid(row=0, column=0, sticky="nsew")

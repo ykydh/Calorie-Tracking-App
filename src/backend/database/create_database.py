@@ -1,4 +1,4 @@
-from database import createDatabase, clearDatabase, initalizeDatabase
+from database import createDatabase, clearDatabase, initalizeDatabase, test
 
 try:
     clearDatabase()

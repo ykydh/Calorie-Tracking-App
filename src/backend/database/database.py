@@ -1,5 +1,6 @@
 #Programmed by Aiden Pickett
 
+from datetime import datetime, timedelta
 import sqlite3
 
 #Creates the database so sqlite3 library can be used
@@ -93,6 +94,7 @@ def createDatabase():
             E_LOG_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             EXERCISE_ID INTEGER NOT NULL,
             OWNER_USERNAME VARCHAR(80) NOT NULL,
+            PERFORMED_FOR INT NOT NULL,
             PERFORMED_ON DATE,
             FOREIGN KEY (OWNER_USERNAME) REFERENCES Account(USERNAME) ON DELETE CASCADE,
             FOREIGN KEY (EXERCISE_ID) REFERENCES Exercise(EXERCISE_ID) ON DELETE CASCADE
@@ -126,7 +128,7 @@ def createDatabase():
 def clearDatabase():
     tables = [
         "Height_Log",
-        "Weight_Log"
+        "Weight_Log",
         "Lifting",
         "Cardio",
         "User",
@@ -150,13 +152,13 @@ def initalizeDatabase():
 
     # Food Samples
     foods = [
-        ("bread", "wonder", 2.456, .026, .509, .088),
-        ("sirloin tip steak", "beef choice", 2.143, .143, 0, .196),
-        ("eggs", "great value", 1.4, .1, 0, .12),
-        ("whole milk", "central dairy", .625, .033, .05, .033),
-        ("butter", "land o lakes", 7.143, .786, 0, 0),
-        ("sugar", "in the raw", 3.75, 0, 1, 0),
-        ("flour", "bobs red mill", 3.529, .015, .735, .118)
+        ("Bread", "Wonder", 2.456, .026, .509, .088),
+        ("Sirloin Tip Steak", "Beef Choice", 2.143, .143, 0, .196),
+        ("Eggs", "Great Value", 1.4, .1, 0, .12),
+        ("Whole milk", "Central Dairy", .625, .033, .05, .033),
+        ("Butter", "Land O Lakes", 7.143, .786, 0, 0),
+        ("Sugar", "In the Raw", 3.75, 0, 1, 0),
+        ("Flour", "Bobs Red Mill", 3.529, .015, .735, .118)
     ]
 
     cursor.executemany(
@@ -187,10 +189,10 @@ def initalizeDatabase():
     cursor.executemany(
         """INSERT INTO Exercise (TYPE) VALUES (?)""",
         [
-            ("C",),  # Cardio
-            ("C",),  # Cardio
-            ("L",),  # Lifting
-            ("L",)   # Lifting
+            ("c",),  # Cardio
+            ("c",),  # Cardio
+            ("l",),  # Lifting
+            ("l",)   # Lifting
         ]
     )
 
@@ -229,23 +231,29 @@ def initalizeDatabase():
             VALUES ("test", ?, ?, ?)
         """,
         [
-            (1, 50, "2025-01-01"),
-            (2, 200, "2025-01-01"),
-            (3, 60, "2025-01-02")
+            (1, 50, datetime.now().date()),
+            (2, 200, datetime.now().date()),
+            (3, 60, datetime.now().date())
         ]
     )
 
     # Exercise Log
     cursor.executemany(
         """
-            INSERT INTO Exercise_Log (EXERCISE_ID, OWNER_USERNAME, PERFORMED_ON)
-            VALUES (?, "test", ?)
+            INSERT INTO Exercise_Log (EXERCISE_ID, PERFORMED_FOR, OWNER_USERNAME, PERFORMED_ON)
+            VALUES (?, ?, "test", ?)
         """,
         [
-            (1, "2025-01-01"),  # Running
-            (3, "2025-01-02")   # Bench Press
+            (1, 60, datetime.now().date()),  # Running
+            (3, 60, datetime.now().date())   # Bench Press
         ]
     )
+
+    weightStart = 200
+    weights = []
+    for i in range(30):
+        date = datetime.now().date() - timedelta(days=29 - i)
+        weights.append((weightStart - i, date))
 
     # Weight log
     cursor.executemany(
@@ -253,10 +261,7 @@ def initalizeDatabase():
             INSERT INTO Weight_Log (OWNER_USERNAME, WEIGHT, LOGGED_ON)
             VALUES ("test", ?, ?)
         """,
-        [
-            (190, "2025-01-01"),
-            (188, "2025-02-01")
-        ]
+        weights
     )
 
     # Height log
@@ -266,8 +271,16 @@ def initalizeDatabase():
             VALUES ("test", ?, ?)
         """,
         [
-            (70, "2025-01-01")  # 70 inches
+            (70, datetime.now().date())  # 70 inches
         ]
     )
 
     conn.commit()
+
+def test():
+    cursor.execute("SELECT * FROM Exercise_Log")
+    response = cursor.fetchall()
+
+    for item in response:
+        for i in item:
+            print(i)
