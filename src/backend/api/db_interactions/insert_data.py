@@ -89,25 +89,38 @@ class InsertData:
         except Exception as e:
             return {"success": False, "message": str(e)}
         
+    # Insert Exercise
+    def insertExercise(self, type):
+        try:
+            with self.conn:
+                cursor = self.conn.execute(
+                    Queries.INSERT_EXERCISE,
+                    {"type": type}
+                )
+                id = cursor.lastrowid
+            return {"success": True, "id": id}
+        except Exception as e:
+            return {"success": False, "message": str(e)}
+        
     # Inserts lift
-    def insertLift(self, name, musclesWorked):
+    def insertLift(self, id, name, musclesWorked):
         try:
             with self.conn:
                 self.conn.execute(
                     Queries.INSERT_LIFT,
-                    {"name": name, "musclesWorked": musclesWorked}
+                    {"id": id, "name": name, "musclesWorked": musclesWorked}
                 )
             return {"success": True}
         except Exception as e:
             return {"success": False, "message": str(e)}
 
     # Inserts cardio
-    def insertCardio(self, name, cbpm):
+    def insertCardio(self, id, name, cbpm):
         try:
             with self.conn:
                 self.conn.execute(
                     Queries.INSERT_CARDIO,
-                    {"name": name, "cbpm": cbpm}
+                    {"id": id, "name": name, "cbpm": cbpm}
                 )
             return {"success": True}
         except Exception as e:

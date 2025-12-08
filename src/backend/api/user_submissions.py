@@ -128,10 +128,13 @@ class UserSubmissions:
         return self.insertData.addHeightLog(username, height, date)
     
     def insertExercise(self, name, type, cbpm, musclesWorked):
-        if type == 'l':
-            return self.insertData.insertLift(name, musclesWorked)
-        else:
-            return self.insertData.insertCardio(name, cbpm)
+        response = self.insertData.insertExercise(type)
+        if response["success"]:
+            if type == 'l':
+                return self.insertData.insertLift(response["id"], name, musclesWorked)
+            else:
+                return self.insertData.insertCardio(response["id"], name, cbpm)
+        return response
         
     def insertFood(self, name, brand, unitCals, unitProtein, unitCarbs, unitFat):
         return self.insertData.insertFood(name, brand, unitCals, unitProtein, unitCarbs, unitFat)

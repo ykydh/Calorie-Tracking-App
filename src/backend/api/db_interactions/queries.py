@@ -252,14 +252,14 @@ class Queries:
 
     # Inserts cardio to the cardio table
     INSERT_CARDIO = """
-        INSERT INTO Cardio (NAME, CALORIES_BURNED_PER_MINUTE)
-        VALUES(:type, :cbpm)
+        INSERT INTO Cardio (CARDIO_ID, NAME, CALORIES_BURNED_PER_MINUTE)
+        VALUES(:id, :name, :cbpm)
     """
 
     # Inserts lift to the lift table
     INSERT_LIFT = """
-        INSERT INTO Lift (NAME, MUSCLES_WORKED)
-        VALUES(:name, :musclesWorked)
+        INSERT INTO Lifting (LIFT_ID, NAME, MUSCLES_WORKED)
+        VALUES(:id, :name, :musclesWorked)
     """
     
     # Inserts a food to the food table
