@@ -265,7 +265,7 @@ class Queries:
     # Inserts a food to the food table
     INSERT_FOOD = """
         INSERT INTO Food (NAME, BRAND, CALORIES, PROTEIN, CARBS, FAT)
-        VALUES (:name, brand, unitCals, unitProtein, unitCarbs, unitFat)
+        VALUES (:name, :brand, :unitCals, :unitProtein, :unitCarbs, :unitFat)
     """
     
     # MODIFICATIONS

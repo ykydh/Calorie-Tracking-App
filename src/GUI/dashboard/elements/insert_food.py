@@ -31,19 +31,19 @@ class InsertFood(ctk.CTkFrame):
         self.servingEntry.pack(fill="x", pady=5)
 
         # Calories per gram
-        self.caloriesEntry = ctk.CTkEntry(container, placeholder_text="Calories per gram")
+        self.caloriesEntry = ctk.CTkEntry(container, placeholder_text="Calories")
         self.caloriesEntry.pack(fill="x", pady=5)
 
         # Protein per gram
-        self.proteinEntry = ctk.CTkEntry(container, placeholder_text="Protein per gram")
+        self.proteinEntry = ctk.CTkEntry(container, placeholder_text="Protein")
         self.proteinEntry.pack(fill="x", pady=5)
 
         # Carbs per gram
-        self.carbsEntry = ctk.CTkEntry(container, placeholder_text="Carbs per gram")
+        self.carbsEntry = ctk.CTkEntry(container, placeholder_text="Carbs")
         self.carbsEntry.pack(fill="x", pady=5)
 
         # Fat per gram
-        self.fatEntry = ctk.CTkEntry(container, placeholder_text="Fat per gram")
+        self.fatEntry = ctk.CTkEntry(container, placeholder_text="Fat")
         self.fatEntry.pack(fill="x", pady=5)
 
         # Submit button
@@ -84,7 +84,8 @@ class InsertFood(ctk.CTkFrame):
             # Return to InsertFoodLog
             self.controller.showFrame("InsertFoodLog")
 
-        except:
+        except Exception as e:
+            print(e)
             ctk.CTkLabel(self, text="Invalid input.", text_color="red").pack(pady=5)
             
     def clearInput(self):
