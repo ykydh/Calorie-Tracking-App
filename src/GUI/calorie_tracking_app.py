@@ -44,16 +44,19 @@ class CalorieTrackingApp(ctk.CTk):
         frame = self.frames[name]
         frame.tkraise()
 
+        if hasattr(self.currFrame, "clearInput"):
+            self.currFrame.after(1, self.currFrame.clearInput)
+            
         self.currFrame = frame
 
         if hasattr(frame, "onShow"):
             frame.onShow()
+
+
             
     def handleEnter(self, event=None):
         if hasattr(self.currFrame, "handleEnter"):
             self.currFrame.handleEnter()
-        if hasattr(self.currFrame, "clearInput"):
-            self.currFrame.clearInput()
             
     def logout(self):
         for frame in self.frames.values():
